@@ -19,7 +19,7 @@ target's ignored `.agent-tool/` directory.
 ## Command groups
 
 | Group | Commands | What they do |
-|---|---|---|
+| --- | --- | --- |
 | Lifecycle | `install`, `update`, `uninstall`, `doctor` | Plan or reconcile owned links; inspect required and optional prerequisites. |
 | Repository | `repo changed-files`, `summary`, `locate`, `affected-projects`, `ownership`, `health`, `hygiene` | Derive change, path, MSBuild ownership, policy, and tracked-artifact facts. |
 | Git | `git state`, `summary`, `conflict-forecast`, `prepare-commit`, `issue-start` | Inspect local state, forecast a merge, prepare a commit, or create an issue branch only after safety checks. |
@@ -28,7 +28,7 @@ target's ignored `.agent-tool/` directory.
 | .NET execution | `dotnet verify`, `format`, `dependencies`, `package-audit`, `api-check`, `release-verify` | Run targeted project checks. `format --apply` is the explicit formatting mutation; `api-check` requires an existing API-validation baseline. |
 | Evidence | `logs summarize`, `sarif summarize`, `artifact inspect`, `artifact verify`, `test-results summarize`, `coverage summarize`, `verification decide` | Read and compact local artifacts; `sarif summarize --baseline PATH` identifies new and fixed findings. `verification decide` applies final PR evidence policy to an exact commit and can compare optional local evidence. |
 | JEV | `jev noul`, `choice`, `score`, `screen`, `cache-clear` | Make a policy-bounded judgment or clear the local response cache. See [JEV](../concepts/jev.md). |
-| Upstreams and product | `upstream status`, `update`, `dotnet-skills status|diff|check`, `validate`, `eval`, `release` | Inspect pinned integration metadata, validate product metadata/evals, or create a source archive. |
+| Upstreams and product | `upstream status`, `update`, `dotnet-skills status\|diff\|check`, `validate`, `eval`, `release` | Inspect pinned integration metadata, validate product metadata/evals, or create a source archive. |
 | Durable results | `results init`, `new`, `list`, `latest`, `context`, `clean` | Maintain the deliberately small cross-session result store. |
 
 Useful exact forms include:

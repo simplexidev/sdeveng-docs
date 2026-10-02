@@ -31,22 +31,52 @@ jobs:
         shell: bash
         run: |
           # Existing human docs use wrapped prose without a fixed line limit.
-          # Keep all other default Markdown rules enabled; never auto-fix files.
-          cat > "$RUNNER_TEMP/markdownlint-cli2.jsonc" <<'JSON'
+          # Keep other default rules enabled; export fixes without pushing from CI.
+          cat > "$RUNNER_TEMP/.markdownlint-cli2.jsonc" <<'JSON'
           {
             "config": {
               "default": true,
               "MD013": false
             },
-            "fix": false
+            "fix": true
           }
           JSON
 
-      - name: Check Markdown Formatting
+      - name: Format Markdown
         uses: DavidAnson/markdownlint-cli2-action@v22
         with:
-          config: ${{ runner.temp }}/markdownlint-cli2.jsonc
+          config: ${{ runner.temp }}/.markdownlint-cli2.jsonc
           globs: '**/*.md'
+          fix: true
+
+      - name: Export Formatting Patch
+        id: formatting
+        if: ${{ !cancelled() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git diff --binary -- '*.md' > "$RUNNER_TEMP/markdown-format.patch"
+          if [[ -s "$RUNNER_TEMP/markdown-format.patch" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload Formatting Patch
+        if: ${{ !cancelled() && steps.formatting.outputs.changed == 'true' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: Markdown Formatting Patch
+          path: ${{ runner.temp }}/markdown-format.patch
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Require Committed Formatting
+        if: ${{ !cancelled() && steps.formatting.outputs.changed == 'true' }}
+        shell: bash
+        run: |
+          echo "::error::Markdown needs formatting. Download the Markdown Formatting Patch artifact, apply it with git apply, then commit and push the changes."
+          exit 1
 
       - name: Check Local Links and Anchors
         if: ${{ !cancelled() }}

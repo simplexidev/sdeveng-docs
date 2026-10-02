@@ -21,7 +21,7 @@ evaluation executor and does not replace the GPT fallback.
 Evaluation records separate product comparison from agent customization:
 
 | Field | Value | Meaning |
-|---|---|---|
+| --- | --- | --- |
 | comparison | `VANILLA` | No compared toolkit/upstream optimization for the scenario. |
 | comparison | `UPSTREAM` | The plan's pinned upstream skill overlay. This is not “all upstream content.” |
 | comparison | `OPTIMIZED` | The toolkit configuration or new optimization named by the plan. |
@@ -56,7 +56,7 @@ arm that fails a required check is a quality regression, not an efficiency win.
 Every numeric run metric has a value, unit, evidence kind, and method:
 
 | Kind | Interpretation |
-|---|---|
+| --- | --- |
 | `measured` | Directly observed or counted by the named collection method. |
 | `derived` | Calculated from measured/validated inputs, such as a mean, rate, or delta. |
 | `estimated` | Approximated by a disclosed method; for example static tokens use `ceil(UTF-8 bytes / 4)`. |
