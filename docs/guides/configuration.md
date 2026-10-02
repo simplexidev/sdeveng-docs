@@ -5,7 +5,7 @@ validated by matching JSON Schemas under `schemas/`. Project files cannot silent
 override this policy.
 
 | File | Purpose |
-|---|---|
+| --- | --- |
 | `toolkit.json` | Product version, optional tools, and descriptive integrations |
 | `jev.json` | JEV mode, endpoint, model, timeout, limits, thresholds, and cache lifetime |
 | `model-routing.json` | Advisory model tiers; not an automatic resolver |

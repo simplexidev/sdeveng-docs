@@ -6,7 +6,7 @@ tool. Runtime `SKILL.md` files and their compact references stay canonical in th
 repository; this is the human index.
 
 | Skill | Intended role |
-|---|---|
+| --- | --- |
 | `address-pr-review`, `prepare-commit`, `finish-pr`, `issue-start`, `roadmap-next` | Scoped review-feedback, commit, PR, issue-branch, and next-work workflows. |
 | `repo-health`, `docs-impact`, `architecture-change` | Repository policy, documentation impact, and component-boundary analysis. |
 | `run-dotnet-tests`, `write-dotnet-tests`, `dotnet-test-quality`, `dotnet-coverage` | Narrow test planning/execution, test authoring, quality review, and coverage interpretation. |
