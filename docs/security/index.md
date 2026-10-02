@@ -26,7 +26,9 @@ accidental disclosure and quoting hazards; unrelated ambient credentials require
 selected tool remain the user's responsibility.
 
 Branch creation requires a clean, attached repository with no in-progress Git operation
-and an appropriate open issue. PR preparation never commits, pushes, publishes, or merges.
+and an appropriate open issue. The read-only PR preparation command does not publish. Separate guarded
+commands can create an owned commit, push an owned branch, and create a draft
+PR. They do not merge or force-push.
 GitHub commands use the user's existing `gh` authentication and inherit its permissions.
 
 MSBuild and build commands may execute project or imported logic. Run them only for

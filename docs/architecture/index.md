@@ -60,13 +60,15 @@ request + installed/project instructions
 
 ## Product components
 
-Production executable logic lives in the product repository's single .NET 10 file-based
-app, [`tools/AgentTool.cs`](https://github.com/simplexidev/sdeveng/blob/develop/v3.0.0/tools/AgentTool.cs)
-in `sdeveng`.
-It owns CLI parsing, bounded process execution, repository and MSBuild inspection, output
-compaction, installation ownership, result-store operations, and JEV HTTP requests. The
-utility uses the .NET base class library; tests link the same source rather than maintaining
-a second implementation.
+Production code lives in the .NET 10 solution,
+[`SdevEng.slnx`](https://github.com/simplexidev/sdeveng/blob/develop/v3.0.0/SdevEng.slnx).
+`SdevEng.Core` owns deterministic contracts and decisions;
+`SdevEng.Infrastructure` owns Git, GitHub, process, persistence, and HTTP
+adapters; and `SdevEng.Cli` owns startup, command parsing, modules, and
+rendering. The file-based [`tools/AgentTool.cs`](https://github.com/simplexidev/sdeveng/blob/develop/v3.0.0/tools/AgentTool.cs)
+remains a thin direct-invocation launcher. Focused Core and Infrastructure
+tests compile against their projects, while CLI compatibility tests exercise
+the integrated command surface.
 
 `global/AGENTS.md` supplies broad installed policy. Native-agent TOML files under `agents/`
 are discovered separately, because plugin registration does not populate Codex's native

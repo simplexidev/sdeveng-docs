@@ -1,6 +1,6 @@
 # AgentTool command reference
 
-`AgentTool` is the product's single .NET 10 file-based utility. Run it from the toolkit
+`AgentTool` is the .NET 10 product CLI. Its file-based entry point delegates to the normal solution runtime. Run it from the toolkit
 checkout, or use the Unix `sdeveng (legacy codex-agent-tool)` link installed with `--bin`. The checkout's
 `help` output is authoritative for its version:
 
@@ -23,10 +23,10 @@ target's ignored `.agent-tool/` directory.
 | Lifecycle | `install`, `update`, `uninstall`, `doctor` | Plan or reconcile owned links; inspect required and optional prerequisites. |
 | Repository | `repo changed-files`, `summary`, `locate`, `affected-projects`, `ownership`, `health`, `hygiene` | Derive change, path, MSBuild ownership, policy, and tracked-artifact facts. |
 | Git | `git state`, `summary`, `conflict-forecast`, `prepare-commit`, `issue-start` | Inspect local state, forecast a merge, prepare a commit, or create an issue branch only after safety checks. |
-| GitHub | `github pr-status`, `review-comments`, `prepare-pr`, `actions` | Read bounded `gh` data and prepare local PR work. `actions --failed-logs` is for a selected run. |
+| GitHub | `github pr-status`, `review-comments`, `prepare-pr`, `actions`, `labels` | Read bounded GitHub data and prepare local PR work. `actions --failed-logs` is for a selected run. `labels --apply` creates missing configured labels and updates their descriptions and colors without deleting unmanaged labels. |
 | .NET facts and plans | `dotnet inspect`, `build-plan`, `test-plan`, `diagnostics-plan` | Inspect evaluated project facts or emit a narrow build, test, or diagnostics plan before execution. |
 | .NET execution | `dotnet verify`, `format`, `dependencies`, `package-audit`, `api-check`, `release-verify` | Run targeted project checks. `format --apply` is the explicit formatting mutation; `api-check` requires an existing API-validation baseline. |
-| Evidence | `logs summarize`, `sarif summarize`, `artifact inspect`, `artifact verify`, `test-results summarize`, `coverage summarize` | Read and compact local artifacts; `sarif summarize --baseline PATH` identifies new and fixed findings. |
+| Evidence | `logs summarize`, `sarif summarize`, `artifact inspect`, `artifact verify`, `test-results summarize`, `coverage summarize`, `verification decide` | Read and compact local artifacts; `sarif summarize --baseline PATH` identifies new and fixed findings. `verification decide` applies final PR evidence policy to an exact commit and can compare optional local evidence. |
 | JEV | `jev noul`, `choice`, `score`, `screen`, `cache-clear` | Make a policy-bounded judgment or clear the local response cache. See [JEV](../concepts/jev.md). |
 | Upstreams and product | `upstream status`, `update`, `dotnet-skills status|diff|check`, `validate`, `eval`, `release` | Inspect pinned integration metadata, validate product metadata/evals, or create a source archive. |
 | Durable results | `results init`, `new`, `list`, `latest`, `context`, `clean` | Maintain the deliberately small cross-session result store. |
@@ -50,8 +50,10 @@ its internal validation; it is not a GitHub publication command.
 ## Boundaries and exit status
 
 AgentTool uses argument arrays rather than a shell and removes `TYPESAFE_API_KEY` from
-child-process environments. It never commits, pushes, merges, creates remote repositories,
-pulls Git updates, or installs external tools. It can run builds, MSBuild evaluation,
+child-process environments. Guarded commands can create owned commits and branches, push an exact owned branch,
+create draft PRs, apply allowlisted labels, and request bounded CI reruns. They
+never force-push, rewrite history, merge PRs, delete unrelated work, or create
+arbitrary remote repositories. It can run builds, MSBuild evaluation,
 GitHub CLI, package restore/audit, and formatting, so use it only against trusted targets
 and review emitted plans before execution.
 

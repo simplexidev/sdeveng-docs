@@ -19,7 +19,7 @@ product manifests and validation are canonical.
 
 | Material | Owner | Consumer boundary | Human-doc treatment |
 |---|---|---|---|
-| `tools/AgentTool.cs`, `config/`, `schemas/`, installers, tests, and release workflow | `sdeveng` | Runtime, tests, and release tooling | Explain behavior here; link to the product for the canonical source and schemas. |
+| `SdevEng.slnx`, `src/`, `tools/AgentTool.cs`, `config/`, `schemas/`, installers, tests, and release workflow | `sdeveng` | Runtime, tests, and release tooling | Explain behavior here; link to the product for the canonical source and schemas. |
 | `plugins/sdeveng/skills/*/SKILL.md` | `sdeveng` | Codex skill discovery and active agent workflows | Keep product-local. The [skills catalog](reference/skills.md) is an index, not a replacement. |
 | `plugins/sdeveng/skills/jev-judgment/references/` | `sdeveng` | Lazily loaded by the JEV skill through product-relative paths | Must remain product-local. [JEV and bounded judgment](concepts/jev.md) is a separate explanation for people. |
 | `global/AGENTS.md` and `agents/reviewer.toml` | `sdeveng` | Installed Codex instructions and native-agent discovery | Keep exact runtime files in the product; summarize their roles in human prose only. |

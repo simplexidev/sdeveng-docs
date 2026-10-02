@@ -18,13 +18,14 @@ dotnet tools/AgentTool.cs sarif summarize --file results.sarif
 # Check Git and prepare a handoff
 dotnet tools/AgentTool.cs git prepare-commit
 dotnet tools/AgentTool.cs results init
-dotnet tools/AgentTool.cs results new handoff phase-name
+dotnet tools/AgentTool.cs results new handoff feature-review
 ```
 
 The separator `--` prevents the `dotnet` host from consuming AgentTool options such as
 `--project` or `--help`. Output is compact JSON in default and `--json` modes. AgentTool
-may write overflow details to ignored `.agent-tool/` paths, but it never commits, pushes,
-merges, creates a remote repository, pulls Git updates, or installs external tools.
+may write overflow details to ignored `.agent-tool/` paths, and can perform explicit owned Git/GitHub mutations after safety and capability
+checks. It never force-pushes, rewrites history, merges PRs, deletes unrelated
+work, creates arbitrary remote repositories, or installs external tools.
 
 Use `.agent-results/` only for durable, non-obvious state that must cross independent
 sessions. Audits, handoffs, reviews, and reports are tracked; generated logs, traces,
