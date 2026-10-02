@@ -1,0 +1,75 @@
+name: Validate Markdown
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Preserve validation evidence for every push and PR run.
+concurrency:
+  group: markdown-${{ github.run_id }}-${{ github.run_attempt }}
+  cancel-in-progress: false
+
+jobs:
+  validate-markdown:
+    name: Validate Markdown
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Prepare Markdown Rules
+        shell: bash
+        run: |
+          # Existing human docs use wrapped prose without a fixed line limit.
+          # Keep all other default Markdown rules enabled; never auto-fix files.
+          cat > "$RUNNER_TEMP/markdownlint-cli2.jsonc" <<'JSON'
+          {
+            "config": {
+              "default": true,
+              "MD013": false
+            },
+            "fix": false
+          }
+          JSON
+
+      - name: Check Markdown Formatting
+        uses: DavidAnson/markdownlint-cli2-action@v22
+        with:
+          config: ${{ runner.temp }}/markdownlint-cli2.jsonc
+          globs: '**/*.md'
+
+      - name: Check Local Links and Anchors
+        if: ${{ !cancelled() }}
+        uses: lycheeverse/lychee-action@v2
+        with:
+          lycheeVersion: v0.24.2
+          args: >-
+            --offline --include-fragments --no-progress
+            --root-dir "${{ github.workspace }}" './**/*.md'
+          output: ${{ runner.temp }}/markdown-links.md
+          fail: true
+          failIfEmpty: true
+
+      - name: Check Diff Whitespace
+        if: ${{ !cancelled() }}
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -Eeuo pipefail
+          if [[ -n "$BASE_SHA" ]] && git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            git diff --check "$BASE_SHA" HEAD
+          else
+            # Initial pushes and manual runs may not provide an existing base.
+            git show --format= --check HEAD
+          fi

@@ -22,10 +22,14 @@ Tests use temporary homes, temporary Git repositories, and fake HTTP responses. 
 install tests into your real Codex profile or use a live billable JEV call in normal test
 or CI execution.
 
-Production executable logic stays in `tools/AgentTool.cs`. Add focused tests for changed
-behavior, keep config and schemas synchronized, and give skills narrow triggers with
-observable regression scenarios. Standard parsers in tests are preferable to approximate
-homegrown parsing; they are not runtime dependencies.
+Production logic belongs to the .NET solution: Core owns deterministic contracts and
+decisions, Infrastructure owns external adapters, and Cli owns startup and command
+modules. `tools/AgentTool.cs` is the direct-invocation compatibility launcher for the
+CLI. See [the architecture overview](../architecture/index.md#product-components) for
+the component and repository boundaries. Add focused tests for changed behavior, keep
+config and schemas synchronized, and give skills narrow triggers with observable
+regression scenarios. Standard parsers in tests are preferable to approximate homegrown
+parsing; they are not runtime dependencies.
 
 For release changes, verify all manifests and `config/toolkit.json` share the intended
 version, run the full gate, and create a version tag only with explicit authorization.
